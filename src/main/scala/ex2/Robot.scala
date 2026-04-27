@@ -1,5 +1,7 @@
 package ex2
 
+import ex2.Direction.North
+
 type Position = (Int, Int)
 enum Direction:
   case North, East, South, West
@@ -42,9 +44,22 @@ class LoggingRobot(val robot: Robot) extends Robot:
     robot.act()
     println(robot.toString)
 
+class RobotWithBattery(val robot: Robot, var batteryLevel: Int) extends Robot:
+  export robot.{position, direction, turn}
+
+  override def act(): Unit = batteryLevel match
+    case n if n > 0 => robot.act(); batteryLevel = batteryLevel - 1; println(robot.toString + " with battery " + batteryLevel)
+    case _ => println("Robot battery insufficient: " + robot.toString);
+
+
 @main def testRobot(): Unit =
   val robot = LoggingRobot(SimpleRobot((0, 0), Direction.North))
   robot.act() // robot at (0, 1) facing North
   robot.turn(robot.direction.turnRight) // robot at (0, 1) facing East
   robot.act() // robot at (1, 1) facing East
   robot.act() // robot at (2, 1) facing East
+
+  val robotWithBattery = RobotWithBattery(SimpleRobot((0, 0), North), 2)
+  robotWithBattery.act()
+  robotWithBattery.act()
+  robotWithBattery.act()
