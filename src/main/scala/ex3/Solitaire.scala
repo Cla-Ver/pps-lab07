@@ -11,5 +11,14 @@ object Solitaire extends App:
       yield row.mkString
     rows.mkString("\n")
 
+  type Solution = Iterable[Int]
+  type IterableFactory = Solution => Iterable[Solution]
+  given IterableFactory = LazyList(_)
+
+  /*def placeMarks(boardSize: Int): Iterable[Solution] =
+    for
+      x <- 0 to boardSize
+      y <- 0 to boardSize
+      numberPos = (x, y)*/
 
   println(render(solution = Seq((0, 0), (2, 1)), width = 3, height = 3))
