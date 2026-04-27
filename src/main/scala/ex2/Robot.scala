@@ -51,6 +51,13 @@ class RobotWithBattery(val robot: Robot, var batteryLevel: Int) extends Robot:
     case n if n > 0 => robot.act(); batteryLevel = batteryLevel - 1; println(robot.toString + " with battery " + batteryLevel)
     case _ => println("Robot battery insufficient: " + robot.toString);
 
+class RobotCanFail(val robot: Robot, val failureChance: Double) extends Robot:
+  export robot.{position, direction, turn}
+  import scala.util.Random
+  private val r = Random
+  override def act(): Unit = r.nextDouble match
+    case n if n < failureChance => println("Action failed! " + robot.toString)
+    case _ => robot.act(); println(robot.toString)
 
 @main def testRobot(): Unit =
   val robot = LoggingRobot(SimpleRobot((0, 0), Direction.North))
@@ -63,3 +70,8 @@ class RobotWithBattery(val robot: Robot, var batteryLevel: Int) extends Robot:
   robotWithBattery.act()
   robotWithBattery.act()
   robotWithBattery.act()
+
+  val robotCanFail = RobotCanFail(SimpleRobot((0, 0), North), 0.5)
+  robotCanFail.act()
+  robotCanFail.act()
+  robotCanFail.act()
