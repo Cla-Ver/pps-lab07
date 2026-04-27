@@ -59,6 +59,14 @@ class RobotCanFail(val robot: Robot, val failureChance: Double) extends Robot:
     case n if n < failureChance => println("Action failed! " + robot.toString)
     case _ => robot.act(); println(robot.toString)
 
+class RobotRepeated(val robot: Robot, val repeats: Int) extends Robot:
+  export robot.{position, direction, turn}
+
+  override def act(): Unit = Range(0, repeats).foreach(e =>
+    robot.act()
+    println(robot.toString)
+  )
+
 @main def testRobot(): Unit =
   val robot = LoggingRobot(SimpleRobot((0, 0), Direction.North))
   robot.act() // robot at (0, 1) facing North
@@ -66,12 +74,18 @@ class RobotCanFail(val robot: Robot, val failureChance: Double) extends Robot:
   robot.act() // robot at (1, 1) facing East
   robot.act() // robot at (2, 1) facing East
 
+  println("Robot with battery")
   val robotWithBattery = RobotWithBattery(SimpleRobot((0, 0), North), 2)
   robotWithBattery.act()
   robotWithBattery.act()
   robotWithBattery.act()
 
+  println("Robot can fail")
   val robotCanFail = RobotCanFail(SimpleRobot((0, 0), North), 0.5)
   robotCanFail.act()
   robotCanFail.act()
   robotCanFail.act()
+
+  println("Robot repeated")
+  val robotRepeated = RobotRepeated(SimpleRobot((0, 0), North), 3)
+  robotRepeated.act()
