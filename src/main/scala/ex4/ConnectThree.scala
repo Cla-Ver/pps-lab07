@@ -24,6 +24,7 @@ object ConnectThree extends App:
    */
   type Board = Seq[Disk]
   type Game = Seq[Board]
+  private val BOARD_SIZE = 4
 
   import Player.*
 
@@ -31,7 +32,10 @@ object ConnectThree extends App:
     case Some(disk) => Some(disk.player)
     case _ => None
 
-  def firstAvailableRow(board: Board, x: Int): Option[Int] = ???
+  def firstAvailableRow(board: Board, x: Int): Option[Int] = board.filter(disk => disk.x == x).map(disk => disk.y).toSet match
+    case set if set.isEmpty => Some(0)
+    case set if set.size < BOARD_SIZE => Some(set.size)
+    case _ => None
 
   def placeAnyDisk(board: Board, player: Player): Seq[Board] = ???
 
@@ -53,7 +57,7 @@ object ConnectThree extends App:
   println(find(List(Disk(0, 0, X)), 0, 0)) // Some(X)
   println(find(List(Disk(0, 0, X), Disk(0, 1, O), Disk(0, 2, X)), 0, 1)) // Some(O)
   println(find(List(Disk(0, 0, X), Disk(0, 1, O), Disk(0, 2, X)), 1, 1)) // None
-/*
+
   // Exercise 2: implement firstAvailableRow such that..
   println("EX 2: ")
   println(firstAvailableRow(List(), 0)) // Some(0)
@@ -61,7 +65,7 @@ object ConnectThree extends App:
   println(firstAvailableRow(List(Disk(0, 0, X), Disk(0, 1, X)), 0)) // Some(2)
   println(firstAvailableRow(List(Disk(0, 0, X), Disk(0, 1, X), Disk(0, 2, X)), 0)) // Some(3)
   println(firstAvailableRow(List(Disk(0, 0, X), Disk(0, 1, X), Disk(0, 2, X), Disk(0, 3, X)), 0)) // None
-
+/*
   // Exercise 3: implement placeAnyDisk such that..
   printBoards(placeAnyDisk(List(), X))
   // .... .... .... ....
