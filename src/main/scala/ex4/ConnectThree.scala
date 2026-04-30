@@ -37,7 +37,12 @@ object ConnectThree extends App:
     case set if set.size < BOARD_SIZE => Some(set.size)
     case _ => None
 
-  def placeAnyDisk(board: Board, player: Player): Seq[Board] = ???
+  def placeAnyDisk(board: Board, player: Player): Seq[Board] =
+    for
+      col <- 0 until BOARD_SIZE
+      row <- firstAvailableRow(board, col)
+    yield
+      Disk(col, row, player) +: board
 
   def computeAnyGame(player: Player, moves: Int): LazyList[Game] = ???
 
@@ -65,7 +70,7 @@ object ConnectThree extends App:
   println(firstAvailableRow(List(Disk(0, 0, X), Disk(0, 1, X)), 0)) // Some(2)
   println(firstAvailableRow(List(Disk(0, 0, X), Disk(0, 1, X), Disk(0, 2, X)), 0)) // Some(3)
   println(firstAvailableRow(List(Disk(0, 0, X), Disk(0, 1, X), Disk(0, 2, X), Disk(0, 3, X)), 0)) // None
-/*
+
   // Exercise 3: implement placeAnyDisk such that..
   printBoards(placeAnyDisk(List(), X))
   // .... .... .... ....
@@ -78,6 +83,7 @@ object ConnectThree extends App:
   // ...X .... .... ....
   // ...O ..XO .X.O X..O
   println("EX 4: ")
+  /*
 // Exercise 3 (ADVANCED!): implement computeAnyGame such that..
   computeAnyGame(O, 4).foreach { g =>
     printBoards(g)
