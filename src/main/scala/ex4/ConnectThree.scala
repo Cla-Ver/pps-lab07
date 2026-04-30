@@ -32,9 +32,8 @@ object ConnectThree extends App:
     case Some(disk) => Some(disk.player)
     case _ => None
 
-  def firstAvailableRow(board: Board, x: Int): Option[Int] = board.filter(disk => disk.x == x).map(disk => disk.y).toSet match
-    case set if set.isEmpty => Some(0)
-    case set if set.size < BOARD_SIZE => Some(set.size)
+  def firstAvailableRow(board: Board, x: Int): Option[Int] = board.filter(disk => disk.x == x).map(disk => disk.y).toSet.size match
+    case n if n < BOARD_SIZE => Some(n)
     case _ => None
 
   def placeAnyDisk(board: Board, player: Player): Seq[Board] =
