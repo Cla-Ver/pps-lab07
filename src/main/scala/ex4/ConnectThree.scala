@@ -27,7 +27,9 @@ object ConnectThree extends App:
 
   import Player.*
 
-  def find(board: Board, x: Int, y: Int): Option[Player] = ???
+  def find(board: Board, x: Int, y: Int): Option[Player] = board.find(d => d.x == x && d.y == y) match
+    case Some(disk) => Some(disk.player)
+    case _ => None
 
   def firstAvailableRow(board: Board, x: Int): Option[Int] = ???
 
@@ -51,7 +53,7 @@ object ConnectThree extends App:
   println(find(List(Disk(0, 0, X)), 0, 0)) // Some(X)
   println(find(List(Disk(0, 0, X), Disk(0, 1, O), Disk(0, 2, X)), 0, 1)) // Some(O)
   println(find(List(Disk(0, 0, X), Disk(0, 1, O), Disk(0, 2, X)), 1, 1)) // None
-
+/*
   // Exercise 2: implement firstAvailableRow such that..
   println("EX 2: ")
   println(firstAvailableRow(List(), 0)) // Some(0)
@@ -59,7 +61,8 @@ object ConnectThree extends App:
   println(firstAvailableRow(List(Disk(0, 0, X), Disk(0, 1, X)), 0)) // Some(2)
   println(firstAvailableRow(List(Disk(0, 0, X), Disk(0, 1, X), Disk(0, 2, X)), 0)) // Some(3)
   println(firstAvailableRow(List(Disk(0, 0, X), Disk(0, 1, X), Disk(0, 2, X), Disk(0, 3, X)), 0)) // None
-  // Exercise 2: implement placeAnyDisk such that..
+
+  // Exercise 3: implement placeAnyDisk such that..
   printBoards(placeAnyDisk(List(), X))
   // .... .... .... ....
   // .... .... .... ....
@@ -88,3 +91,4 @@ object ConnectThree extends App:
 // .... X... X... X... X...
 
 // Exercise 4 (VERY ADVANCED!) -- modify the above one so as to stop each game when someone won!!
+*/
