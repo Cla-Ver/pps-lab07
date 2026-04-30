@@ -46,10 +46,8 @@ object Solitaire extends App:
   private def isPositionFree(position: (Int, Int), others: Iterable[Pos]) = !others.toSeq.contains(position)
 
 
-  //placeMarks(5)
   placeMarks(5).foreach(s =>
     println(render(s.toSeq, width = 5, height = 5))
     println("----------")
   )
-  //println(render(placeMarks(5).head.toSeq, width = 5, height = 5))
   //println(render(solution = Seq((0, 0), (2, 1)), width = 3, height = 3))
