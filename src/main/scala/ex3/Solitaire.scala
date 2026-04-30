@@ -28,7 +28,7 @@ object Solitaire extends App:
           numberPos = (x, y)
           if isPositionFree(numberPos, solutionUntilNow)
           if isValidPosition(numberPos, solutionUntilNow)
-          solution <- placeMarksHelper(numberPos +: solutionUntilNow.toSeq) //placeholder
+          solution <- placeMarksHelper(numberPos +: solutionUntilNow.toSeq)
         yield
           solution
 
