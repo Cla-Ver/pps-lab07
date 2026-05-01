@@ -43,7 +43,19 @@ object ConnectThree extends App:
     yield
       Disk(col, row, player) +: board
 
-  def computeAnyGame(player: Player, moves: Int): LazyList[Game] = ???
+
+  def computeAnyGame(player: Player, moves: Int): LazyList[Game] =
+    def computeAnyGameHelper(player: Player, moves: Int, boardUntilNow: Board): LazyList[Game] = moves match
+      case 0 => LazyList(Seq(boardUntilNow))
+      case _ =>
+        for
+          placeDisk <- LazyList.from(placeAnyDisk(boardUntilNow, player))
+          nextBoard <- computeAnyGameHelper(player.other, moves - 1, placeDisk)
+        yield
+          boardUntilNow +: nextBoard
+
+    computeAnyGameHelper(player, moves, List())
+
 
   def printBoards(game: Seq[Board]): Unit =
     for
@@ -82,7 +94,7 @@ object ConnectThree extends App:
   // ...X .... .... ....
   // ...O ..XO .X.O X..O
   println("EX 4: ")
-  /*
+
 // Exercise 3 (ADVANCED!): implement computeAnyGame such that..
   computeAnyGame(O, 4).foreach { g =>
     printBoards(g)
@@ -98,6 +110,6 @@ object ConnectThree extends App:
 // .... .... .... X... X...
 // .... .... O... O... O...
 // .... X... X... X... X...
-
+/*
 // Exercise 4 (VERY ADVANCED!) -- modify the above one so as to stop each game when someone won!!
 */
