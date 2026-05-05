@@ -1,5 +1,7 @@
 package ex4
 
+import ex4.ConnectThree.Direction.{HORIZONTAL, NEGATIVE_DIAGONAL, POSITIVE_DIAGONAL, VERTICAL}
+
 import java.util.OptionalInt
 
 // Optional!
@@ -12,6 +14,14 @@ object ConnectThree extends App:
       case _ => X
 
   case class Disk(x: Int, y: Int, player: Player)
+
+  enum Direction(x: Int, y: Int):
+    case VERTICAL extends  Direction(0, 1)
+    case HORIZONTAL extends Direction(1, 0)
+    case POSITIVE_DIAGONAL extends Direction(1, 1)
+    case NEGATIVE_DIAGONAL extends Direction(-1, -1)
+    def dx: Int = this.x
+    def dy: Int = this.y
   /**
    * Board:
    * y
@@ -46,15 +56,28 @@ object ConnectThree extends App:
 
   def computeAnyGame(player: Player, moves: Int): LazyList[Game] =
     def computeAnyGameHelper(player: Player, moves: Int, boardUntilNow: Board): LazyList[Game] = moves match
-      case 0 => LazyList(Seq(boardUntilNow))
+      case n if n <= 0 || checkWin(boardUntilNow).isDefined => LazyList(Seq(boardUntilNow))
       case _ =>
         for
           placeDisk <- LazyList.from(placeAnyDisk(boardUntilNow, player))
-          nextBoard <- computeAnyGameHelper(player.other, moves - 1, placeDisk)
+          nextBoard <- computeAnyGameHelper(player.other, moves, placeDisk)
         yield
           boardUntilNow +: nextBoard
 
     computeAnyGameHelper(player, moves, List())
+
+  private def checkDirectionForWin(board: Board, disk: Disk, direction: Direction): Boolean =
+    val d1 = find(board, disk.x + direction.dx, disk.y + direction.dy)
+    val d2 = find(board, disk.x + (direction.dx * 2), disk.y + (direction.dy * 2))
+    d1.isDefined && d2.isDefined && d1.get == disk.player && d2.get == disk.player
+
+  private def checkWin(board: Board): Option[Player] = board.foldLeft(Option.empty)((win, disk) => win match
+    case Some(e) => Some(e)
+    case _ => if checkDirectionForWin(board, disk, VERTICAL) ||
+      checkDirectionForWin(board, disk, HORIZONTAL) ||
+      checkDirectionForWin(board, disk, POSITIVE_DIAGONAL) ||
+      checkDirectionForWin(board, disk, NEGATIVE_DIAGONAL) then Some(disk.player) else None
+  )
 
 
   def printBoards(game: Seq[Board]): Unit =
