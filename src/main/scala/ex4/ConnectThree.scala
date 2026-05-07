@@ -2,8 +2,6 @@ package ex4
 
 import ex4.ConnectThree.Direction.{HORIZONTAL, NEGATIVE_DIAGONAL, POSITIVE_DIAGONAL, VERTICAL}
 
-import java.util.OptionalInt
-
 // Optional!
 object ConnectThree extends App:
   val bound = 3
@@ -34,7 +32,7 @@ object ConnectThree extends App:
    */
   type Board = Seq[Disk]
   type Game = Seq[Board]
-  private val BOARD_SIZE = 4
+  val BOARD_SIZE = 4
 
   import Player.*
 
@@ -52,7 +50,6 @@ object ConnectThree extends App:
       row <- firstAvailableRow(board, col)
     yield
       Disk(col, row, player) +: board
-
 
   def computeAnyGame(player: Player, moves: Int): LazyList[Game] =
     def computeAnyGameHelper(player: Player, moves: Int, boardUntilNow: Board): LazyList[Game] = moves match
@@ -73,12 +70,12 @@ object ConnectThree extends App:
 
   private def checkWin(board: Board): Option[Player] = board.foldLeft(Option.empty)((win, disk) => win match
     case Some(e) => Some(e)
-    case _ => if checkDirectionForWin(board, disk, VERTICAL) ||
+    case None if checkDirectionForWin(board, disk, VERTICAL) ||
       checkDirectionForWin(board, disk, HORIZONTAL) ||
       checkDirectionForWin(board, disk, POSITIVE_DIAGONAL) ||
-      checkDirectionForWin(board, disk, NEGATIVE_DIAGONAL) then Some(disk.player) else None
+      checkDirectionForWin(board, disk, NEGATIVE_DIAGONAL) => Some(disk.player)
+    case _ => None
   )
-
 
   def printBoards(game: Seq[Board]): Unit =
     for
