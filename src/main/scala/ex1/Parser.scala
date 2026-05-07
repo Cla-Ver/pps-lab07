@@ -35,7 +35,6 @@ class NonEmptyParser(chars: Set[Char])
     with NonEmpty[Char]
 
 trait NotTwoConsecutive[T] extends Parser[T]:
-  //val todo = ???
   private var last: Option[T] = Option.empty
   private var ok = true
   abstract override def parse(t: T): Boolean = last match
@@ -44,7 +43,6 @@ trait NotTwoConsecutive[T] extends Parser[T]:
 
   abstract override def end: Boolean = ok && super.end
 
-// ???
 
 class NotTwoConsecutiveParser(chars: Set[Char])
     extends BasicParser(chars) with NotTwoConsecutive[Char]
